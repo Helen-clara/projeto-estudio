@@ -10,6 +10,7 @@
     "outDir": "./dist/renderer"
   },
   "include": [
-    "src/renderer/**/*"
+    "src/renderer/**/*",
+    "src/preload/index.d.ts"
   ]
 }

@@ -1,3 +1,5 @@
+/// <reference path="../preload/index.d.ts" />
+
 // Código TypeScript do processo Renderer (Frontend)
 window.addEventListener('DOMContentLoaded', () => {
   const versionsContainer = document.getElementById('versions-container');
