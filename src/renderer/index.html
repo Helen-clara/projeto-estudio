@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ink & Glow Studio - Gestão de Estética e Tatuagem</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #121214;
+      color: #e1e1e6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 32px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #29292e;
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #996DFF 0%, #C47F17 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 20px;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(153, 109, 255, 0.3);
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #a8a8b3;
+    }
+
+    .badge {
+      background: rgba(153, 109, 255, 0.15);
+      color: #996DFF;
+      border: 1px solid #996DFF;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background-color: #202024;
+      border: 1px solid #29292e;
+      border-radius: 8px;
+      padding: 24px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: #996DFF;
+      transform: translateY(-2px);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card p, .card ul {
+      font-size: 14px;
+      color: #a8a8b3;
+      line-height: 1.6;
+    }
+
+    .card ul {
+      list-style-type: none;
+    }
+
+    .card li {
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card li::before {
+      content: "•";
+      color: #996DFF;
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: auto;
+      border-top: 1px solid #29292e;
+      padding-top: 16px;
+      font-size: 12px;
+      color: #737380;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .versions-bar {
+      display: flex;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo-icon">✨</div>
+      <div>
+        <h1>Ink & Glow Studio</h1>
+        <div class="subtitle">Gestão de Estética e Tatuagem Desktop</div>
+      </div>
+    </div>
+    <div class="badge">Parte 1 de 8: Concluída</div>
+  </header>
+
+  <main class="container">
+    <div class="card">
+      <div class="card-title">🚀 Arquitetura Base</div>
+      <p>Aplicação desktop inicializada com sucesso em <strong>Electron</strong> e <strong>TypeScript (POO)</strong>, com configuração estrita e saída modular em <code>dist/</code>.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔒 Segurança (Electron IPC)</div>
+      <ul>
+        <li>Context Isolation: <strong>Ativado</strong></li>
+        <li>Node Integration: <strong>Desativado</strong></li>
+        <li>Ponte de comunicação segura via Preload</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 Próxima Etapa</div>
+      <p><strong>Parte 2:</strong> Modelagem das 7 tabelas relacionais no <strong>MySQL</strong> e criação dos scripts de migração e carga inicial.</p>
+    </div>
+  </main>
+
+  <footer>
+    <div>Ink & Glow Studio &copy; 2026 - DAD (Prof. willcotil)</div>
+    <div class="versions-bar" id="versions-container">
+      Carregando versões do ambiente...
+    </div>
+  </footer>
+
+  <script src="./renderer.js"></script>
+</body>
+</html>
