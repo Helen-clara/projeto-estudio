@@ -7,9 +7,14 @@
     "build:main": "tsc -p tsconfig.main.json",
     "build:renderer": "tsc -p tsconfig.renderer.json",
     "copy:renderer": "node -e \"const fs=require('fs'); fs.mkdirSync('dist/renderer', {recursive:true}); fs.copyFileSync('src/renderer/index.html', 'dist/renderer/index.html');\"",
-    "build": "npm run build:main && npm run build:renderer && npm run copy:renderer",
+    "clean": "rimraf dist",
+    "build": "npm run clean && npm run build:main && npm run build:renderer && npm run copy:renderer",
     "start": "npm run build && electron .",
-    "db:init": "node -e \"console.log('Script de inicialização do banco MySQL configurado para a Parte 2.')\""
+    "watch:main": "tsc -p tsconfig.main.json --watch --preserveWatchOutput",
+    "watch:renderer": "tsc -p tsconfig.renderer.json --watch --preserveWatchOutput",
+    "dev": "npm run build && concurrently -k -n main,renderer,electron \"npm:watch:main\" \"npm:watch:renderer\" \"electron .\"",
+    "db:init": "ts-node scripts/initDb.ts",
+    "db:check": "ts-node scripts/checkDb.ts"
   },
   "keywords": [
     "electron",
@@ -25,12 +30,20 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.7",
-    "mysql2": "^3.12.0"
+    "mysql2": "^3.12.0",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^10.6.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.13.5",
+    "@types/node-cron": "^3.0.11",
+    "@types/nodemailer": "^8.0.2",
+    "concurrently": "^10.0.7",
     "electron": "^34.2.0",
+    "eslint": "^10.15.0",
+    "rimraf": "^6.1.4",
+    "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   }
 }
