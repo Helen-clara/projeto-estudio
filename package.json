@@ -6,7 +6,7 @@
   "scripts": {
     "build:main": "tsc -p tsconfig.main.json",
     "build:renderer": "tsc -p tsconfig.renderer.json",
-    "copy:renderer": "node -e \"const fs=require('fs'); fs.mkdirSync('dist/renderer', {recursive:true}); fs.copyFileSync('src/renderer/index.html', 'dist/renderer/index.html');\"",
+    "copy:renderer": "node -e \"require('fs').cpSync('src/renderer','dist/renderer',{recursive:true,filter:(s)=>!s.endsWith('.ts')&&!s.endsWith('.gitkeep')})\"",
     "clean": "rimraf dist",
     "build": "npm run clean && npm run build:main && npm run build:renderer && npm run copy:renderer",
     "start": "npm run build && electron .",

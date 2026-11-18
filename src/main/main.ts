@@ -37,13 +37,14 @@ class AppWindowManager {
       webPreferences: {
         contextIsolation: true,
         nodeIntegration: false,
+        sandbox: true,
         preload: path.join(__dirname, '../preload/preload.js')
       }
     });
 
-    // Caminho da página inicial compilada ou de desenvolvimento
-    const distHtmlPath = path.join(__dirname, '../renderer/index.html');
-    const srcHtmlPath = path.join(__dirname, '../../src/renderer/index.html');
+    // O app sempre começa pela tela de login; após autenticar, ela navega para o shell (index.html).
+    const distHtmlPath = path.join(__dirname, '../renderer/login/login.html');
+    const srcHtmlPath = path.join(__dirname, '../../src/renderer/login/login.html');
 
     if (fs.existsSync(distHtmlPath)) {
       this.mainWindow.loadFile(distHtmlPath);
