@@ -42,6 +42,22 @@ import type {
   ResultadoLembreteDTO,
   ResumoProcessamentoDTO,
 } from '../shared/lembretes';
+import type {
+  ConsumoPeriodoDTO,
+  CotacaoDTO,
+  FiltroMateriais,
+  FiltroMovimentacoes,
+  MaterialDTO,
+  MaterialInput,
+  MaterialSalvoDTO,
+  MovimentacaoDTO,
+  MovimentacaoInput,
+  MovimentacaoRegistradaDTO,
+  PaginaMateriaisDTO,
+  PaginaMovimentacoesDTO,
+  RecalculoPrecosDTO,
+  RelatorioEstoqueDTO,
+} from '../shared/estoque';
 
 /** Toda chamada devolve `{ ok, data?, error? }`; nunca lança para o renderer. */
 type Resposta<T> = Promise<ApiResult<T>>;
@@ -142,7 +158,31 @@ export interface LembretesAPI {
   rodarAgora(): Resposta<ResumoProcessamentoDTO>;
 }
 
+/** Estoque. ADMIN edita; RECEPCAO só consulta; PROFISSIONAL registra saída ligada ao próprio atendimento. */
+export interface EstoqueAPI {
+  listar(filtro?: FiltroMateriais): Resposta<PaginaMateriaisDTO>;
+  obter(id: number): Resposta<MaterialDTO>;
+  /** Sem `id` cria (aceita quantidadeInicial); com `id` edita. Preço em USD ou BRL: o outro é calculado. */
+  salvar(payload: SalvarPayload<MaterialInput>): Resposta<MaterialSalvoDTO>;
+  inativar(id: number): Resposta<void>;
+  reativar(id: number): Resposta<void>;
+  /** ENTRADA, SAIDA (bloqueia saldo insuficiente) ou AJUSTE (quantidade = novo saldo; motivo obrigatório). */
+  movimentar(dados: MovimentacaoInput): Resposta<MovimentacaoRegistradaDTO>;
+  movimentacoes(filtro?: FiltroMovimentacoes): Resposta<PaginaMovimentacoesDTO>;
+  editarMotivo(payload: { id: number; motivo: string | null }): Resposta<MovimentacaoDTO>;
+  /** Exclusão lógica da movimentação, desfazendo o efeito no saldo. */
+  estornar(id: number): Resposta<MovimentacaoRegistradaDTO>;
+  /** Materiais com quantidade <= estoque mínimo. */
+  alertas(): Resposta<MaterialDTO[]>;
+  /** null se nunca houve cotação; `desatualizada` quando a AwesomeAPI não respondeu. */
+  cotacaoAtual(): Resposta<CotacaoDTO | null>;
+  recalcularPrecos(): Resposta<RecalculoPrecosDTO>;
+  relatorio(): Resposta<RelatorioEstoqueDTO>;
+  consumo(periodo: PeriodoPayload): Resposta<ConsumoPeriodoDTO>;
+}
+
 export interface IElectronAPI {
+  estoque: EstoqueAPI;
   lembretes: LembretesAPI;
   agenda: AgendaAPI;
   historico: HistoricoAPI;
