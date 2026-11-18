@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:">
+  <title>Entrar — Ink & Glow Studio</title>
+  <link rel="stylesheet" href="./login.css">
+</head>
+<body>
+  <main class="login">
+    <section class="login__card" aria-labelledby="login-titulo">
+      <div class="login__marca">
+        <div class="login__logo" aria-hidden="true">✨</div>
+        <div>
+          <h1 id="login-titulo">Ink &amp; Glow Studio</h1>
+          <p class="login__subtitulo">Gestão de estética e tatuagem</p>
+        </div>
+      </div>
+
+      <form id="form-login" class="login__form" novalidate>
+        <label class="campo">
+          <span class="campo__rotulo">Usuário</span>
+          <input id="campo-login" name="login" type="text" autocomplete="username" maxlength="50"
+                 spellcheck="false" autocapitalize="off" required autofocus>
+        </label>
+
+        <label class="campo">
+          <span class="campo__rotulo">Senha</span>
+          <span class="campo__senha">
+            <input id="campo-senha" name="senha" type="password" autocomplete="current-password" maxlength="72" required>
+            <button id="btn-mostrar-senha" type="button" class="campo__olho"
+                    aria-label="Mostrar senha" aria-pressed="false" title="Mostrar senha">👁</button>
+          </span>
+        </label>
+
+        <p id="mensagem-erro" class="login__erro" role="alert" aria-live="assertive" hidden></p>
+
+        <button id="btn-entrar" type="submit" class="botao">Entrar</button>
+      </form>
+
+      <p class="login__rodape">Acesso restrito à equipe do estúdio.</p>
+    </section>
+  </main>
+
+  <script src="./login.js"></script>
+</body>
+</html>

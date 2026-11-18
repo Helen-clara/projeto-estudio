@@ -3,6 +3,8 @@ import bcrypt from 'bcryptjs';
 /** Gera hash de senha (abstração para permitir trocar o algoritmo ou simular em testes). */
 export interface SenhaHasher {
   hash(senha: string): Promise<string>;
+  /** Compara a senha digitada com o hash gravado (tempo constante no bcrypt). */
+  compare(senha: string, hash: string): Promise<boolean>;
 }
 
 /** Hash com bcryptjs (salt aleatório embutido no hash). */
@@ -11,5 +13,9 @@ export class BcryptSenhaHasher implements SenhaHasher {
 
   public hash(senha: string): Promise<string> {
     return bcrypt.hash(senha, this.custo);
+  }
+
+  public compare(senha: string, hash: string): Promise<boolean> {
+    return bcrypt.compare(senha, hash);
   }
 }

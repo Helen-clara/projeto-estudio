@@ -154,7 +154,83 @@ export interface DefinirServicosPayload {
   servicoIds: number[];
 }
 
+// ---------------------------------------------------------------- Autenticação e usuários
+
+export type PerfilValor = 'ADMIN' | 'RECEPCAO' | 'PROFISSIONAL';
+
+/** Usuário logado (nunca inclui senha ou hash). */
+export interface UsuarioSessaoDTO {
+  id: number;
+  nome: string;
+  login: string;
+  perfil: PerfilValor;
+  especialidade: EspecialidadeValor | null;
+  /** Permissões do perfil (valores do enum Permissao), para a tela esconder o que não pode usar. */
+  permissoes: string[];
+  /** ISO 8601: quando a sessão expira se não houver atividade. */
+  expiraEm: string;
+}
+
+export interface LoginPayload {
+  login: string;
+  senha: string;
+}
+
+export interface TrocarSenhaPayload {
+  senhaAtual: string;
+  novaSenha: string;
+}
+
+export interface UsuarioInput {
+  nome: string;
+  cpf?: string | null;
+  email: string;
+  telefone?: string | null;
+  login: string;
+  perfil: PerfilValor;
+  /** Obrigatória para PROFISSIONAL; deve ser vazia para os outros perfis. */
+  especialidade?: EspecialidadeValor | null;
+  /** Obrigatória ao criar; ignorada ao editar (use resetarSenha). */
+  senha?: string;
+}
+
+export interface UsuarioDTO {
+  id: number;
+  nome: string;
+  cpf: string | null;
+  email: string;
+  telefone: string | null;
+  login: string;
+  perfil: PerfilValor;
+  especialidade: EspecialidadeValor | null;
+  ativo: boolean;
+  /** ISO 8601 ou null se nunca acessou. */
+  ultimoAcesso: string | null;
+  bloqueado: boolean;
+}
+
+export interface FiltroUsuarios extends FiltroListagem {
+  perfil?: PerfilValor;
+}
+
+export interface ResetarSenhaPayload {
+  id: number;
+  novaSenha: string;
+}
+
 // ---------------------------------------------------------------- Canais IPC
+
+export type CanalAuth =
+  | 'auth:login'
+  | 'auth:logout'
+  | 'auth:usuarioAtual'
+  | 'auth:trocarSenha'
+  | 'usuarios:listar'
+  | 'usuarios:obter'
+  | 'usuarios:salvar'
+  | 'usuarios:inativar'
+  | 'usuarios:reativar'
+  | 'usuarios:resetarSenha';
 
 /** Canais IPC dos cadastros (main e preload usam este tipo, então um nome errado não compila). */
 export type CanalCadastro =

@@ -1,20 +1,32 @@
+import { AuthIpcHandler } from './AuthIpcHandler';
 import { CadastrosContainer } from './CadastrosContainer';
 import { ClienteIpcHandler } from './ClienteIpcHandler';
 import { IpcRegistrar } from './IpcRegistrar';
 import { ProfissionalIpcHandler } from './ProfissionalIpcHandler';
+import { SegurancaContainer } from './SegurancaContainer';
 import { ServicoIpcHandler } from './ServicoIpcHandler';
+import { UsuarioIpcHandler } from './UsuarioIpcHandler';
 
 export { IpcRegistrar } from './IpcRegistrar';
 export { IpcEntrada } from './IpcEntrada';
 export { CadastrosContainer } from './CadastrosContainer';
+export { SegurancaContainer } from './SegurancaContainer';
 
-/** Registra os canais IPC de clientes, serviços e profissionais. Chamar uma vez, após app.whenReady(). */
-export function registrarHandlersCadastros(
-  container: CadastrosContainer = new CadastrosContainer(),
+/**
+ * Registra todos os canais IPC. Chamar uma vez, após app.whenReady().
+ * Todos os canais, exceto auth:login/logout/usuarioAtual, passam pelo IpcGuard
+ * (sessão + permissão) antes de executar.
+ */
+export function registrarHandlers(
+  seguranca: SegurancaContainer = new SegurancaContainer(),
+  cadastros: CadastrosContainer = new CadastrosContainer(),
   ipc: IpcRegistrar = new IpcRegistrar(),
 ): IpcRegistrar {
-  new ClienteIpcHandler(container, ipc).registrar();
-  new ServicoIpcHandler(container, ipc).registrar();
-  new ProfissionalIpcHandler(container, ipc).registrar();
+  const { guard } = seguranca;
+  new AuthIpcHandler(seguranca, ipc).registrar();
+  new UsuarioIpcHandler(seguranca, ipc).registrar();
+  new ClienteIpcHandler(cadastros, ipc, guard).registrar();
+  new ServicoIpcHandler(cadastros, ipc, guard).registrar();
+  new ProfissionalIpcHandler(cadastros, ipc, guard).registrar();
   return ipc;
 }
