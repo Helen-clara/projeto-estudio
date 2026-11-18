@@ -276,10 +276,9 @@ export class EstoqueService {
   /** Consumo (saídas) no período, por categoria e por material — base para estatísticas. */
   public async consumo(dataInicio: string, dataFim: string): Promise<ConsumoPeriodoDTO> {
     const { de, ate } = EstoqueService.periodo(dataInicio, dataFim, true);
-    const [porCategoria, porMaterial] = await Promise.all([
-      this.movimentacoes.consumo(de as Date, ate as Date, 'categoria'),
-      this.movimentacoes.consumo(de as Date, ate as Date, 'material'),
-    ]);
+    // Em sequência: usa uma conexão por vez do pool (servidores compartilhados limitam conexões).
+    const porCategoria = await this.movimentacoes.consumo(de as Date, ate as Date, 'categoria');
+    const porMaterial = await this.movimentacoes.consumo(de as Date, ate as Date, 'material');
     return {
       dataInicio,
       dataFim,
