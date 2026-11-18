@@ -145,6 +145,7 @@ export class Agendamento {
 
   /** Conclui (exige CONFIRMADO) e grava o valor efetivamente cobrado. */
   public concluir(valorCobrado: number, agora: Date, observacoes?: string | null): void {
+    this.exigirTransicao('CONCLUIDO');
     new ValidacaoCampos()
       .check(
         Number.isFinite(valorCobrado) && valorCobrado >= 0 && valorCobrado <= VALOR_MAXIMO &&
@@ -169,6 +170,7 @@ export class Agendamento {
   }
 
   public marcarFalta(agora: Date): void {
+    this.exigirTransicao('FALTOU');
     if (this._props.inicio.getTime() > agora.getTime()) {
       throw new ConflictError('Só é possível marcar falta depois do horário marcado.');
     }
@@ -180,13 +182,18 @@ export class Agendamento {
   }
 
   private transitar(para: StatusAgendamentoValor): void {
+    this.exigirTransicao(para);
+    this._props.status = para;
+  }
+
+  /** Lança erro de domínio se a transição não for permitida (não altera o estado). */
+  private exigirTransicao(para: StatusAgendamentoValor): void {
     if (!Agendamento.podeTransitar(this.status, para)) {
       throw new ConflictError(
         `Transição inválida: um agendamento ${ROTULOS[this.status]} não pode ser ${ROTULOS[para]}.` +
           (para === 'CONCLUIDO' && this.status === 'AGENDADO' ? ' Confirme o agendamento antes de concluir.' : ''),
       );
     }
-    this._props.status = para;
   }
 
   private exigirEmAberto(acao: string): void {

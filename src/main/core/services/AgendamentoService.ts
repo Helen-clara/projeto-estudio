@@ -43,8 +43,9 @@ export class HorarioFuncionamento {
     const fechamento = HorarioFuncionamento.minutos(env.HORARIO_FECHAMENTO) ?? p.fechamento;
     const dias = (env.DIAS_FUNCIONAMENTO ?? '')
       .split(',')
-      .map((d) => Number(d.trim()))
-      .filter((d) => Number.isInteger(d) && d >= 0 && d <= 6);
+      .map((d) => d.trim())
+      .filter((d) => /^[0-6]$/.test(d))
+      .map(Number);
     try {
       return new HorarioFuncionamento(abertura, fechamento, dias.length > 0 ? new Set(dias) : p.dias);
     } catch {
