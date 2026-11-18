@@ -1,4 +1,12 @@
-import type { ClienteDTO, ClienteInput, ClienteSalvoDTO, FiltroListagem, PaginaDTO } from '../../../shared/dtos';
+import type {
+  ClienteDTO,
+  ClienteInput,
+  ClienteSalvoDTO,
+  ConsultaCepDTO,
+  FiltroListagem,
+  PaginaDTO,
+} from '../../../shared/dtos';
+import { ViaCepClient } from '../../integrations/ViaCepClient';
 import { Cliente, ConflictError, NotFoundError } from '../entities';
 import { ClienteRepository } from '../repositories';
 import { gravarComUnicidade, paginaDTO } from './ServiceSupport';
@@ -7,7 +15,18 @@ import { gravarComUnicidade, paginaDTO } from './ServiceSupport';
 export class ClienteService {
   public static readonly AVISO_MENOR_IDADE = 'Cliente menor de 18 anos: não pode realizar tatuagem.';
 
-  constructor(private readonly clientes: ClienteRepository) {}
+  constructor(
+    private readonly clientes: ClienteRepository,
+    private readonly viaCep: ViaCepClient,
+  ) {}
+
+  /**
+   * Endereço pelo CEP (ViaCEP). Nunca falha: sem resultado, a tela segue com
+   * preenchimento manual e mostra a `mensagem`.
+   */
+  public async buscarEnderecoPorCep(cep: string): Promise<ConsultaCepDTO> {
+    return this.viaCep.buscar(cep);
+  }
 
   public async listar(filtro: FiltroListagem = {}): Promise<PaginaDTO<ClienteDTO>> {
     const page = await this.clientes.buscar(filtro);
