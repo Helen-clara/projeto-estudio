@@ -1,15 +1,14 @@
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
-import { registrarHandlersAuth, registrarHandlersCadastros } from './ipc';
+import { registrarHandlers } from './ipc';
 
 class AppWindowManager {
   private mainWindow: BrowserWindow | null = null;
 
   public init(): void {
     app.whenReady().then(() => {
-      registrarHandlersAuth();
-      registrarHandlersCadastros();
+      registrarHandlers();
       this.createMainWindow();
 
       app.on('activate', () => {
