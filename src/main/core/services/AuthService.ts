@@ -35,6 +35,8 @@ export class AuthService {
    * errada, usuário inativo) gera a mesma mensagem genérica.
    */
   public async login(login: string, senha: string): Promise<UsuarioSessao> {
+    // Nova tentativa encerra qualquer sessão anterior: um login que falha nunca deixa outro usuário logado.
+    this.sessao.logout();
     const loginNormalizado = (login ?? '').trim().toLowerCase();
     if (!loginNormalizado || !senha || loginNormalizado.length > 50 || senha.length > 200) {
       throw new AuthenticationError();
