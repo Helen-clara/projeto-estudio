@@ -1,5 +1,6 @@
 import type { CategoriaValor, EspecialidadeValor, ProfissionalDTO, ProfissionalInput } from '../../../shared/dtos';
 import { CpfValidator, EmailValidator, TelefoneValidator } from '../validators';
+import { PoliticaSenha } from '../security/PoliticaSenha';
 import { ValidacaoCampos, textoOpcional } from './DomainErrors';
 
 const ESPECIALIDADES: readonly EspecialidadeValor[] = ['TATUADOR', 'ESTETICISTA'];
@@ -10,7 +11,7 @@ const CATEGORIA_POR_ESPECIALIDADE: Readonly<Record<EspecialidadeValor, Categoria
   ESTETICISTA: 'ESTETICA',
 };
 
-export const SENHA_TAMANHO_MINIMO = 8;
+export const SENHA_TAMANHO_MINIMO = PoliticaSenha.TAMANHO_MINIMO;
 
 export interface ProfissionalProps {
   nome: string;
@@ -59,14 +60,7 @@ export class Profissional {
 
   /** Regra de senha para novos profissionais. */
   public static validarSenha(senha: string | undefined): void {
-    new ValidacaoCampos()
-      .check(
-        typeof senha === 'string' && senha.length >= SENHA_TAMANHO_MINIMO && senha.length <= 72 &&
-          /[A-Za-z]/.test(senha) && /\d/.test(senha),
-        'senha',
-        `Senha deve ter de ${SENHA_TAMANHO_MINIMO} a 72 caracteres, com letras e números.`,
-      )
-      .throwIfAny();
+    PoliticaSenha.validar(senha);
   }
 
   public get id(): number | null { return this._id; }
