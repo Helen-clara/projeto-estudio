@@ -188,3 +188,5 @@ npm run db:init            # cria o banco (se não existir), as tabelas e insere
 npm run db:init -- --reset # apaga e recria o banco do zero
 npm run db:check           # mostra versão do MySQL e contagem de linhas por tabela
 ```
+
+> **Servidor compartilhado (ex.: servidor da faculdade):** quando o usuário só tem acesso a um banco (normalmente com o mesmo nome do usuário), use esse nome em `DB_NAME`. O `db:init` usa o banco existente e o `--reset` apaga **apenas as 8 tabelas do projeto**, nunca o banco inteiro. Se já existir uma tabela com o mesmo nome de outro trabalho (ex.: `usuarios`), renomeie ou remova a antiga antes de rodar o `db:init`.
