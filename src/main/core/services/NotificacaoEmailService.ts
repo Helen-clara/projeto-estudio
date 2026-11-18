@@ -103,6 +103,8 @@ export interface DadosMensagemLembrete {
   studioNome: string;
   studioEndereco: string;
   previsao: PrevisaoClima | null;
+  /** Momento do envio, para escrever "hoje"/"amanhã" (padrão: agora). */
+  referencia?: Date;
 }
 
 export interface MensagemEmail {
@@ -131,12 +133,13 @@ const PREPARO: Readonly<Record<CategoriaValor, readonly string[]>> = {
 export class MensagemLembrete {
   public static montar(d: DadosMensagemLembrete): MensagemEmail {
     const quando = DataHora.legivel(d.inicio);
+    const dia = MensagemLembrete.quandoRelativo(d.inicio, d.referencia ?? new Date());
     const primeiroNome = d.clienteNome.trim().split(/\s+/)[0] ?? d.clienteNome;
     const dicas = MensagemLembrete.dicasClima(d.previsao, d.servicoCategoria);
     const preparo = PREPARO[d.servicoCategoria] ?? [];
     const e = MensagemLembrete.escapar;
 
-    const assunto = `Lembrete: ${d.servicoNome} amanhã, ${quando} — ${d.studioNome}`;
+    const assunto = `Lembrete: ${d.servicoNome} ${dia}, ${quando} — ${d.studioNome}`;
 
     const html = `<!DOCTYPE html>
 <html lang="pt-BR"><body style="margin:0;padding:24px;background:#f4f4f6;font-family:Segoe UI,Arial,sans-serif;color:#202024">
@@ -146,7 +149,7 @@ export class MensagemLembrete {
       <div style="font-size:13px;color:#c4b5fd">Lembrete do seu atendimento</div>
     </div>
     <div style="padding:24px">
-      <p style="margin:0 0 16px">Olá, <strong>${e(primeiroNome)}</strong>! Seu horário está marcado para amanhã:</p>
+      <p style="margin:0 0 16px">Olá, <strong>${e(primeiroNome)}</strong>! Seu horário está marcado para ${e(dia)}:</p>
       <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:20px">
         <tr><td style="padding:6px 0;color:#737380;width:130px">Data e hora</td><td style="padding:6px 0"><strong>${e(quando)}</strong></td></tr>
         <tr><td style="padding:6px 0;color:#737380">Procedimento</td><td style="padding:6px 0">${e(d.servicoNome)}</td></tr>
@@ -157,7 +160,7 @@ export class MensagemLembrete {
       <ul style="margin:0 0 20px;padding-left:20px;font-size:14px;line-height:1.6">
         ${preparo.map((p) => `<li>${e(p)}</li>`).join('\n        ')}
       </ul>
-      ${dicas.length > 0 ? `<h3 style="font-size:15px;margin:0 0 8px">Previsão do tempo para amanhã</h3>
+      ${dicas.length > 0 ? `<h3 style="font-size:15px;margin:0 0 8px">Previsão do tempo para ${e(dia)}</h3>
       <div style="background:#f5f0ff;border-left:4px solid #996dff;padding:12px 14px;font-size:14px;line-height:1.6;margin-bottom:20px">
         ${dicas.map((t) => `<div>${e(t)}</div>`).join('\n        ')}
       </div>` : ''}
@@ -176,12 +179,23 @@ export class MensagemLembrete {
       '',
       'Como se preparar:',
       ...preparo.map((p) => `- ${p}`),
-      ...(dicas.length > 0 ? ['', 'Previsão do tempo para amanhã:', ...dicas.map((t) => `- ${t}`)] : []),
+      ...(dicas.length > 0 ? ['', `Previsão do tempo para ${dia}:`, ...dicas.map((t) => `- ${t}`)] : []),
       '',
       'Precisa remarcar ou cancelar? Fale com a recepção com antecedência.',
     ].join('\n');
 
     return { assunto, html, texto };
+  }
+
+  /** "hoje", "amanhã" ou "dd/mm" conforme a data do atendimento em relação ao envio. */
+  public static quandoRelativo(inicio: Date, referencia: Date): string {
+    const dias = Math.round(
+      (new Date(inicio.getFullYear(), inicio.getMonth(), inicio.getDate()).getTime() -
+        new Date(referencia.getFullYear(), referencia.getMonth(), referencia.getDate()).getTime()) / 86_400_000,
+    );
+    if (dias === 0) return 'hoje';
+    if (dias === 1) return 'amanhã';
+    return `${String(inicio.getDate()).padStart(2, '0')}/${String(inicio.getMonth() + 1).padStart(2, '0')}`;
   }
 
   /** Resumo do tempo + dicas de cuidado conforme a previsão e o tipo de procedimento. */

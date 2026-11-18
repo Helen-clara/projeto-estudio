@@ -169,6 +169,7 @@ export class LembreteService {
       studioNome: this.config.studioNome,
       studioEndereco: this.config.studioEndereco,
       previsao,
+      referencia: this.relogio(),
     });
 
     try {
