@@ -1,12 +1,14 @@
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
+import { registrarHandlersCadastros } from './ipc';
 
 class AppWindowManager {
   private mainWindow: BrowserWindow | null = null;
 
   public init(): void {
     app.whenReady().then(() => {
+      registrarHandlersCadastros();
       this.createMainWindow();
 
       app.on('activate', () => {

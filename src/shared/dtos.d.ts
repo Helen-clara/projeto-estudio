@@ -153,3 +153,28 @@ export interface DefinirServicosPayload {
   profissionalId: number;
   servicoIds: number[];
 }
+
+// ---------------------------------------------------------------- Canais IPC
+
+/** Canais IPC dos cadastros (main e preload usam este tipo, então um nome errado não compila). */
+export type CanalCadastro =
+  | 'clientes:listar'
+  | 'clientes:obter'
+  | 'clientes:salvar'
+  | 'clientes:inativar'
+  | 'clientes:reativar'
+  | 'clientes:buscarCep'
+  | 'servicos:listar'
+  | 'servicos:obter'
+  | 'servicos:salvar'
+  | 'servicos:inativar'
+  | 'servicos:reativar'
+  | 'profissionais:listar'
+  | 'profissionais:obter'
+  | 'profissionais:salvar'
+  | 'profissionais:inativar'
+  | 'profissionais:reativar'
+  | 'profissionais:listarServicos'
+  | 'profissionais:vincularServico'
+  | 'profissionais:desvincularServico'
+  | 'profissionais:definirServicos';
