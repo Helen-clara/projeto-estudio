@@ -8,7 +8,14 @@ import type {
   FiltroListagem,
   FiltroProfissionais,
   FiltroServicos,
+  FiltroUsuarios,
+  LoginPayload,
   PaginaDTO,
+  ResetarSenhaPayload,
+  TrocarSenhaPayload,
+  UsuarioDTO,
+  UsuarioInput,
+  UsuarioSessaoDTO,
   ProfissionalDTO,
   ProfissionalInput,
   SalvarPayload,
@@ -53,7 +60,29 @@ export interface ProfissionaisAPI {
   definirServicos(payload: DefinirServicosPayload): Resposta<ServicoDTO[]>;
 }
 
+export interface AuthAPI {
+  /** Em caso de falha, `error` traz sempre a mesma mensagem genérica (ou o aviso de bloqueio). */
+  login(payload: LoginPayload): Resposta<UsuarioSessaoDTO>;
+  logout(): Resposta<void>;
+  /** `data` é null quando não há sessão (ou ela expirou). */
+  usuarioAtual(): Resposta<UsuarioSessaoDTO | null>;
+  trocarSenha(payload: TrocarSenhaPayload): Resposta<void>;
+}
+
+/** Somente ADMIN. */
+export interface UsuariosAPI {
+  listar(filtro?: FiltroUsuarios): Resposta<PaginaDTO<UsuarioDTO>>;
+  obter(id: number): Resposta<UsuarioDTO>;
+  /** Sem `id` cria (senha obrigatória); com `id` edita (senha ignorada). */
+  salvar(payload: SalvarPayload<UsuarioInput>): Resposta<UsuarioDTO>;
+  inativar(id: number): Resposta<void>;
+  reativar(id: number): Resposta<void>;
+  resetarSenha(payload: ResetarSenhaPayload): Resposta<void>;
+}
+
 export interface IElectronAPI {
+  auth: AuthAPI;
+  usuarios: UsuariosAPI;
   ping: () => string;
   getVersions: () => {
     node: string;

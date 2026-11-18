@@ -1,13 +1,29 @@
 import { contextBridge, ipcRenderer } from 'electron';
 // Somente tipos: o preload roda em sandbox e não pode importar módulos locais em tempo de execução.
-import type { ApiResult, CanalCadastro } from '../shared/dtos';
+import type { ApiResult, CanalAuth, CanalCadastro } from '../shared/dtos';
 import type { IElectronAPI } from './index';
 
-/** Invoca um canal IPC conhecido (o tipo CanalCadastro impede nomes errados). */
-const invocar = <T>(canal: CanalCadastro, payload?: unknown): Promise<ApiResult<T>> =>
+/** Invoca um canal IPC conhecido (os tipos de canal impedem nomes errados). */
+const invocar = <T>(canal: CanalCadastro | CanalAuth, payload?: unknown): Promise<ApiResult<T>> =>
   ipcRenderer.invoke(canal, payload) as Promise<ApiResult<T>>;
 
 const api: IElectronAPI = {
+  auth: {
+    login: (payload) => invocar('auth:login', payload),
+    logout: () => invocar('auth:logout'),
+    usuarioAtual: () => invocar('auth:usuarioAtual'),
+    trocarSenha: (payload) => invocar('auth:trocarSenha', payload),
+  },
+
+  usuarios: {
+    listar: (filtro) => invocar('usuarios:listar', filtro),
+    obter: (id) => invocar('usuarios:obter', id),
+    salvar: (payload) => invocar('usuarios:salvar', payload),
+    inativar: (id) => invocar('usuarios:inativar', id),
+    reativar: (id) => invocar('usuarios:reativar', id),
+    resetarSenha: (payload) => invocar('usuarios:resetarSenha', payload),
+  },
+
   ping: (): string => 'pong',
   getVersions: () => ({
     node: process.versions.node || '',

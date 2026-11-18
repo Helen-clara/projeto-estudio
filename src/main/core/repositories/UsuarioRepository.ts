@@ -151,6 +151,16 @@ export class UsuarioRepository extends BaseRepository<Usuario, UsuarioGravacao> 
     return Number(row?.total ?? 0);
   }
 
+  /** Quantos serviços estão vinculados (vínculo ativo) a este usuário-profissional. */
+  public async contarServicosVinculados(usuarioId: number): Promise<number> {
+    BaseRepository.assertId(usuarioId);
+    const [row] = await this.db.query<RowDataPacket>(
+      'SELECT COUNT(*) AS total FROM profissional_servicos WHERE profissional_id = ? AND ativo = 1',
+      [usuarioId],
+    );
+    return Number(row?.total ?? 0);
+  }
+
   public async temAgendamentoFuturo(usuarioId: number): Promise<boolean> {
     BaseRepository.assertId(usuarioId);
     const rows = await this.db.query<RowDataPacket>(
