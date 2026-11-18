@@ -83,6 +83,16 @@ export class AgendamentoRepository extends BaseRepository<Agendamento, Agendamen
     return { items: rows.map((r) => this.mapDetalhado(r)), total: Number(total?.total ?? 0), limit, offset };
   }
 
+  /** Soma de valor_cobrado de todos os registros do filtro (sem paginação). */
+  public async somarValorCobrado(busca: BuscaAgendamentos = {}): Promise<number> {
+    const filtros = this.filtros(busca);
+    const [row] = await this.db.query<RowDataPacket>(
+      `SELECT COALESCE(SUM(a.valor_cobrado), 0) AS total FROM agendamentos a${filtros.where}`,
+      filtros.params,
+    );
+    return Number(row?.total ?? 0);
+  }
+
   public listarPorProfissional(profissionalId: number, de: Date, ate: Date, limit = 500): Promise<Page<AgendamentoDetalhado>> {
     return this.buscar({ profissionalId, de, ate, limit });
   }
