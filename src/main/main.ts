@@ -1,14 +1,19 @@
+// Carrega o .env antes de qualquer módulo ler configuração (sessão, lembretes, SMTP, banco).
+import 'dotenv/config';
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 import { registrarHandlers } from './ipc';
+import { LembretesContainer } from './ipc/LembretesContainer';
 
 class AppWindowManager {
   private mainWindow: BrowserWindow | null = null;
+  private readonly lembretes = new LembretesContainer();
 
   public init(): void {
     app.whenReady().then(() => {
-      registrarHandlers();
+      registrarHandlers({ lembretes: this.lembretes });
+      this.lembretes.agendador.iniciar();
       this.createMainWindow();
 
       app.on('activate', () => {
@@ -17,6 +22,8 @@ class AppWindowManager {
         }
       });
     });
+
+    app.on('before-quit', () => this.lembretes.agendador.parar());
 
     app.on('window-all-closed', () => {
       if (process.platform !== 'darwin') {

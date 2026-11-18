@@ -36,6 +36,12 @@ import type {
   HistoricoDTO,
   PeriodoPayload,
 } from '../shared/agenda';
+import type {
+  FiltroLembretes,
+  PaginaLembretesDTO,
+  ResultadoLembreteDTO,
+  ResumoProcessamentoDTO,
+} from '../shared/lembretes';
 
 /** Toda chamada devolve `{ ok, data?, error? }`; nunca lança para o renderer. */
 type Resposta<T> = Promise<ApiResult<T>>;
@@ -125,7 +131,19 @@ export interface EstatisticasAPI {
   resumo(periodo: PeriodoPayload): Resposta<EstatisticasResumoDTO>;
 }
 
+export interface LembretesAPI {
+  /** ADMIN e RECEPCAO. */
+  listar(filtro?: FiltroLembretes): Resposta<PaginaLembretesDTO>;
+  /** Reenvio manual (ADMIN e RECEPCAO): zera tentativas e envia agora. */
+  reenviar(lembreteId: number): Resposta<ResultadoLembreteDTO>;
+  /** Somente ADMIN: exclusão lógica (para de enviar automaticamente). */
+  excluir(lembreteId: number): Resposta<void>;
+  /** Somente ADMIN: processa os lembretes de amanhã imediatamente (demonstração). */
+  rodarAgora(): Resposta<ResumoProcessamentoDTO>;
+}
+
 export interface IElectronAPI {
+  lembretes: LembretesAPI;
   agenda: AgendaAPI;
   historico: HistoricoAPI;
   estatisticas: EstatisticasAPI;

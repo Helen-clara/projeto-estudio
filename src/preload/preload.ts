@@ -2,13 +2,23 @@ import { contextBridge, ipcRenderer } from 'electron';
 // Somente tipos: o preload roda em sandbox e não pode importar módulos locais em tempo de execução.
 import type { ApiResult, CanalAuth, CanalCadastro } from '../shared/dtos';
 import type { CanalAgenda } from '../shared/agenda';
+import type { CanalLembretes } from '../shared/lembretes';
 import type { IElectronAPI } from './index';
 
+type Canal = CanalCadastro | CanalAuth | CanalAgenda | CanalLembretes;
+
 /** Invoca um canal IPC conhecido (os tipos de canal impedem nomes errados). */
-const invocar = <T>(canal: CanalCadastro | CanalAuth | CanalAgenda, payload?: unknown): Promise<ApiResult<T>> =>
+const invocar = <T>(canal: Canal, payload?: unknown): Promise<ApiResult<T>> =>
   ipcRenderer.invoke(canal, payload) as Promise<ApiResult<T>>;
 
 const api: IElectronAPI = {
+  lembretes: {
+    listar: (filtro) => invocar('lembretes:listar', filtro),
+    reenviar: (lembreteId) => invocar('lembretes:reenviar', lembreteId),
+    excluir: (lembreteId) => invocar('lembretes:excluir', lembreteId),
+    rodarAgora: () => invocar('lembretes:rodarAgora'),
+  },
+
   agenda: {
     listar: (filtro) => invocar('agenda:listar', filtro),
     obter: (id) => invocar('agenda:obter', id),

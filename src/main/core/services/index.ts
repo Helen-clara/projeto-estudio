@@ -8,3 +8,6 @@ export { UsuarioService } from './UsuarioService';
 export { AgendamentoService, HorarioFuncionamento, DadosAgendamento } from './AgendamentoService';
 export { HistoricoService } from './HistoricoService';
 export { EstatisticasService } from './EstatisticasService';
+export { NotificacaoEmailService, MensagemLembrete, SmtpConfig, ResultadoEnvio, EnviadorEmail, DadosMensagemLembrete, MensagemEmail } from './NotificacaoEmailService';
+export { LembreteService, ConfigLembretes } from './LembreteService';
+export { AgendadorService, ConfigAgendador } from './AgendadorService';

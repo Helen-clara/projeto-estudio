@@ -5,6 +5,8 @@ import { HistoricoIpcHandler } from './HistoricoIpcHandler';
 import { CadastrosContainer } from './CadastrosContainer';
 import { ClienteIpcHandler } from './ClienteIpcHandler';
 import { IpcRegistrar } from './IpcRegistrar';
+import { LembreteIpcHandler } from './LembreteIpcHandler';
+import { LembretesContainer } from './LembretesContainer';
 import { ProfissionalIpcHandler } from './ProfissionalIpcHandler';
 import { SegurancaContainer } from './SegurancaContainer';
 import { ServicoIpcHandler } from './ServicoIpcHandler';
@@ -15,19 +17,29 @@ export { IpcEntrada } from './IpcEntrada';
 export { CadastrosContainer } from './CadastrosContainer';
 export { SegurancaContainer } from './SegurancaContainer';
 export { AgendaContainer } from './AgendaContainer';
+export { LembretesContainer } from './LembretesContainer';
 
 /**
  * Registra todos os canais IPC. Chamar uma vez, após app.whenReady().
  * Todos os canais, exceto auth:login/logout/usuarioAtual, passam pelo IpcGuard
  * (sessão + permissão) antes de executar.
  */
-export function registrarHandlers(
-  seguranca: SegurancaContainer = new SegurancaContainer(),
-  cadastros: CadastrosContainer = new CadastrosContainer(),
-  ipc: IpcRegistrar = new IpcRegistrar(),
-  agenda: AgendaContainer = new AgendaContainer(),
-): IpcRegistrar {
+export interface ContainersApp {
+  seguranca?: SegurancaContainer;
+  cadastros?: CadastrosContainer;
+  agenda?: AgendaContainer;
+  lembretes?: LembretesContainer;
+  ipc?: IpcRegistrar;
+}
+
+export function registrarHandlers(containers: ContainersApp = {}): IpcRegistrar {
+  const seguranca = containers.seguranca ?? new SegurancaContainer();
+  const cadastros = containers.cadastros ?? new CadastrosContainer();
+  const agenda = containers.agenda ?? new AgendaContainer();
+  const lembretes = containers.lembretes ?? new LembretesContainer();
+  const ipc = containers.ipc ?? new IpcRegistrar();
   const { guard } = seguranca;
+  new LembreteIpcHandler(lembretes, ipc, guard).registrar();
   new AuthIpcHandler(seguranca, ipc).registrar();
   new UsuarioIpcHandler(seguranca, ipc).registrar();
   new ClienteIpcHandler(cadastros, ipc, guard).registrar();
