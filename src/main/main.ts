@@ -12,7 +12,7 @@ class AppWindowManager {
 
   public init(): void {
     app.whenReady().then(() => {
-      registrarHandlers();
+      registrarHandlers({ lembretes: this.lembretes });
       this.lembretes.agendador.iniciar();
       this.createMainWindow();
 
