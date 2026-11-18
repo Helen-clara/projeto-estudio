@@ -1,4 +1,6 @@
 import type {
+  CategoriaValor,
+  EspecialidadeValor,
   FiltroProfissionais,
   PaginaDTO,
   ProfissionalDTO,
@@ -12,6 +14,11 @@ import { SenhaHasher } from './SenhaHasher';
 import { UnidadeDeTrabalho, gravarComUnicidade, paginaDTO } from './ServiceSupport';
 
 const MENSAGEM_DUPLICIDADE = 'Já existe um usuário com este login, e-mail ou CPF.';
+const ROTULO_CATEGORIA: Readonly<Record<CategoriaValor, string>> = { TATUAGEM: 'tatuagem', ESTETICA: 'estética' };
+const ROTULO_ESPECIALIDADE: Readonly<Record<EspecialidadeValor, string>> = {
+  TATUADOR: 'tatuadores',
+  ESTETICISTA: 'esteticistas',
+};
 
 /** Regras de negócio do cadastro de profissionais e do vínculo N:N com serviços. */
 export class ProfissionalService {
@@ -136,7 +143,7 @@ export class ProfissionalService {
     if (!servico.ativo) throw new ConflictError(`O serviço "${servico.nome}" está inativo.`);
     if (!profissional.podeRealizar(servico.categoria)) {
       throw new ValidationError(
-        `Um(a) ${profissional.especialidade.toLowerCase()} só pode ser vinculado(a) a serviços de ${profissional.categoriaAtendida.toLowerCase()}: "${servico.nome}" é de ${servico.categoria.toLowerCase()}.`,
+        `Profissionais ${ROTULO_ESPECIALIDADE[profissional.especialidade]} só realizam serviços de ${ROTULO_CATEGORIA[profissional.categoriaAtendida]}: "${servico.nome}" é de ${ROTULO_CATEGORIA[servico.categoria]}.`,
         { servicoId: 'Serviço incompatível com a especialidade.' },
       );
     }
