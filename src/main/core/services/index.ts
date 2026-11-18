@@ -12,3 +12,4 @@ export { NotificacaoEmailService, MensagemLembrete, SmtpConfig, ResultadoEnvio, 
 export { LembreteService, ConfigLembretes } from './LembreteService';
 export { AgendadorService, ConfigAgendador } from './AgendadorService';
 export { CotacaoService, UltimaCotacaoGravada } from './CotacaoService';
+export { EstoqueService, AutorMovimentacao } from './EstoqueService';
