@@ -5,3 +5,6 @@ export { ServicoService } from './ServicoService';
 export { ProfissionalService } from './ProfissionalService';
 export { AuthService, ConfiguracaoLogin } from './AuthService';
 export { UsuarioService } from './UsuarioService';
+export { AgendamentoService, HorarioFuncionamento, DadosAgendamento } from './AgendamentoService';
+export { HistoricoService } from './HistoricoService';
+export { EstatisticasService } from './EstatisticasService';

@@ -1,4 +1,7 @@
+import { AgendaContainer } from './AgendaContainer';
+import { AgendaIpcHandler } from './AgendaIpcHandler';
 import { AuthIpcHandler } from './AuthIpcHandler';
+import { HistoricoIpcHandler } from './HistoricoIpcHandler';
 import { CadastrosContainer } from './CadastrosContainer';
 import { ClienteIpcHandler } from './ClienteIpcHandler';
 import { IpcRegistrar } from './IpcRegistrar';
@@ -11,6 +14,7 @@ export { IpcRegistrar } from './IpcRegistrar';
 export { IpcEntrada } from './IpcEntrada';
 export { CadastrosContainer } from './CadastrosContainer';
 export { SegurancaContainer } from './SegurancaContainer';
+export { AgendaContainer } from './AgendaContainer';
 
 /**
  * Registra todos os canais IPC. Chamar uma vez, após app.whenReady().
@@ -21,6 +25,7 @@ export function registrarHandlers(
   seguranca: SegurancaContainer = new SegurancaContainer(),
   cadastros: CadastrosContainer = new CadastrosContainer(),
   ipc: IpcRegistrar = new IpcRegistrar(),
+  agenda: AgendaContainer = new AgendaContainer(),
 ): IpcRegistrar {
   const { guard } = seguranca;
   new AuthIpcHandler(seguranca, ipc).registrar();
@@ -28,5 +33,7 @@ export function registrarHandlers(
   new ClienteIpcHandler(cadastros, ipc, guard).registrar();
   new ServicoIpcHandler(cadastros, ipc, guard).registrar();
   new ProfissionalIpcHandler(cadastros, ipc, guard).registrar();
+  new AgendaIpcHandler(agenda, ipc, guard).registrar();
+  new HistoricoIpcHandler(agenda, ipc, guard).registrar();
   return ipc;
 }
