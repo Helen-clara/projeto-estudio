@@ -3,15 +3,33 @@ import { contextBridge, ipcRenderer } from 'electron';
 import type { ApiResult, CanalAuth, CanalCadastro } from '../shared/dtos';
 import type { CanalAgenda } from '../shared/agenda';
 import type { CanalLembretes } from '../shared/lembretes';
+import type { CanalEstoque } from '../shared/estoque';
 import type { IElectronAPI } from './index';
 
-type Canal = CanalCadastro | CanalAuth | CanalAgenda | CanalLembretes;
+type Canal = CanalCadastro | CanalAuth | CanalAgenda | CanalLembretes | CanalEstoque;
 
 /** Invoca um canal IPC conhecido (os tipos de canal impedem nomes errados). */
 const invocar = <T>(canal: Canal, payload?: unknown): Promise<ApiResult<T>> =>
   ipcRenderer.invoke(canal, payload) as Promise<ApiResult<T>>;
 
 const api: IElectronAPI = {
+  estoque: {
+    listar: (filtro) => invocar('estoque:listar', filtro),
+    obter: (id) => invocar('estoque:obter', id),
+    salvar: (payload) => invocar('estoque:salvar', payload),
+    inativar: (id) => invocar('estoque:inativar', id),
+    reativar: (id) => invocar('estoque:reativar', id),
+    movimentar: (dados) => invocar('estoque:movimentar', dados),
+    movimentacoes: (filtro) => invocar('estoque:movimentacoes', filtro),
+    editarMotivo: (payload) => invocar('estoque:editarMotivo', payload),
+    estornar: (id) => invocar('estoque:estornar', id),
+    alertas: () => invocar('estoque:alertas'),
+    cotacaoAtual: () => invocar('estoque:cotacaoAtual'),
+    recalcularPrecos: () => invocar('estoque:recalcularPrecos'),
+    relatorio: () => invocar('estoque:relatorio'),
+    consumo: (periodo) => invocar('estoque:consumo', periodo),
+  },
+
   lembretes: {
     listar: (filtro) => invocar('lembretes:listar', filtro),
     reenviar: (lembreteId) => invocar('lembretes:reenviar', lembreteId),

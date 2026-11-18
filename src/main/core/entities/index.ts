@@ -6,3 +6,5 @@ export { Profissional, ProfissionalProps, SENHA_TAMANHO_MINIMO } from './Profiss
 export { Usuario, UsuarioProps, UsuarioAcesso } from './Usuario';
 export { Agendamento, AgendamentoProps, NovoAgendamento, DataHora } from './Agendamento';
 export { Lembrete, LembreteProps, MARCA_SIMULACAO } from './Lembrete';
+export { Material, MaterialProps, DadosMaterial, arredondar } from './Material';
+export { MovimentacaoEstoque, MovimentacaoProps, MovimentacaoGravacao, PREFIXO_AJUSTE } from './MovimentacaoEstoque';
