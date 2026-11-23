@@ -133,3 +133,5 @@ select.campo__entrada, select.entrada { cursor: pointer; }
 .grafico .linha { fill: none; stroke: var(--ouro); stroke-width: 2.5; }
 .grafico .area { fill: var(--ouro-fundo); }
 .grafico .ponto { fill: var(--fundo); stroke: var(--ouro); stroke-width: 2; }
+
+.nowrap { white-space: nowrap; }

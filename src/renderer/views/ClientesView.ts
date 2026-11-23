@@ -29,9 +29,9 @@ export class ClientesView extends View {
       carregar: (termo, limit, offset) => Api.chamar(window.api.clientes.listar({ termo: termo || undefined, ativo: this.situacao === 'true', limit, offset })),
       colunas: [
         { titulo: 'Cliente', valor: (c) => [h('strong', {}, c.nome), c.menorDeIdade ? [' ', tag('menor de idade', 'aviso')] : null, h('span', { class: 'secundario' }, c.email ?? 'sem e-mail')].flat() },
-        { titulo: 'CPF', valor: (c) => Formato.cpf(c.cpf) },
+        { titulo: 'CPF', valor: (c) => h('span', { class: 'nowrap' }, Formato.cpf(c.cpf)) },
         { titulo: 'Idade', valor: (c) => `${c.idade} anos`, alinhar: 'direita' },
-        { titulo: 'Telefone', valor: (c) => Formato.telefone(c.telefone) },
+        { titulo: 'Telefone', valor: (c) => h('span', { class: 'nowrap' }, Formato.telefone(c.telefone)) },
         { titulo: 'Cidade', valor: (c) => (c.endereco?.cidade ? `${c.endereco.cidade}/${c.endereco.uf ?? ''}` : '—') },
         { titulo: 'Ações', largura: '210px', valor: (c) => h('div', { class: 'acoes' },
           botao(this.podeEditar && c.ativo ? 'Abrir' : 'Ver', () => this.abrir(c)),

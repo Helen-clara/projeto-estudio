@@ -35,6 +35,8 @@ h1, h2, h3, h4 { color: #fff; letter-spacing: -0.2px; font-weight: 650; }
 [hidden] { display: none !important; }
 :focus-visible { outline: 2px solid var(--ouro); outline-offset: 2px; }
 ::selection { background: var(--ouro-fundo); }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--ouro); width: 16px; height: 16px; }
+input[type="date"], input[type="time"] { color-scheme: dark; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* scrollbars discretas */
