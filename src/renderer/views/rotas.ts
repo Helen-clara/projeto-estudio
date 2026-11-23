@@ -3,6 +3,7 @@ import { InicioView } from './InicioView.js';
 import { AgendaView } from './AgendaView.js';
 import { ClientesView } from './ClientesView.js';
 import { EstoqueView } from './EstoqueView.js';
+import { LembretesView } from './LembretesView.js';
 import { ProfissionaisView } from './ProfissionaisView.js';
 import { ServicosView } from './ServicosView.js';
 
@@ -17,4 +18,5 @@ export const ROTAS: RotaView[] = [
   { id: 'profissionais', rotulo: 'Profissionais', icone: '🎨', grupo: 'Cadastros', permissoes: ['PROFISSIONAIS_VER'], criar: (s) => new ProfissionaisView(s) },
   { id: 'servicos', rotulo: 'Serviços', icone: '💉', grupo: 'Cadastros', permissoes: ['SERVICOS_VER'], criar: (s) => new ServicosView(s) },
   { id: 'estoque', rotulo: 'Estoque', icone: '📦', grupo: 'Gestão', permissoes: ['ESTOQUE_VER'], criar: (s) => new EstoqueView(s) },
+  { id: 'lembretes', rotulo: 'Lembretes', icone: '✉️', grupo: 'Gestão', permissoes: ['LEMBRETES_GERENCIAR', 'AGENDA_EDITAR'], criar: (s) => new LembretesView(s) },
 ];
