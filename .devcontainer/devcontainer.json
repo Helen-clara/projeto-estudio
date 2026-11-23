@@ -1,0 +1,22 @@
+{
+  // Ambiente do GitHub Codespaces para rodar o app Electron com interface gráfica.
+  // O "desktop-lite" cria um desktop virtual acessível pelo navegador (porta 6080, senha "vscode").
+  "name": "Ink & Glow Studio",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/desktop-lite:1": {}
+  },
+  "containerEnv": {
+    "DISPLAY": ":1"
+  },
+  "forwardPorts": [6080],
+  "portsAttributes": {
+    "6080": { "label": "Desktop (noVNC) — senha: vscode", "onAutoForward": "notify" }
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint"]
+    }
+  }
+}
