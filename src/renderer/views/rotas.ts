@@ -1,5 +1,5 @@
 import { RotaView } from './View.js';
-import { InicioView } from './InicioView.js';
+import { DashboardView } from './DashboardView.js';
 import { AgendaView } from './AgendaView.js';
 import { ClientesView } from './ClientesView.js';
 import { EstoqueView } from './EstoqueView.js';
@@ -12,7 +12,7 @@ import { ServicosView } from './ServicosView.js';
  * (ver src/main/core/security/Permissao.ts) a tornam visível.
  */
 export const ROTAS: RotaView[] = [
-  { id: 'inicio', rotulo: 'Início', icone: '🏠', grupo: 'Atendimento', permissoes: [], criar: (s) => new InicioView(s) },
+  { id: 'inicio', rotulo: 'Painel', icone: '🏠', grupo: 'Atendimento', permissoes: [], criar: (s) => new DashboardView(s) },
   { id: 'agenda', rotulo: 'Agenda', icone: '📅', grupo: 'Atendimento', permissoes: ['AGENDA_VER_TODOS', 'AGENDA_VER_PROPRIA'], criar: (s) => new AgendaView(s) },
   { id: 'clientes', rotulo: 'Clientes', icone: '👤', grupo: 'Cadastros', permissoes: ['CLIENTES_VER'], criar: (s) => new ClientesView(s) },
   { id: 'profissionais', rotulo: 'Profissionais', icone: '🎨', grupo: 'Cadastros', permissoes: ['PROFISSIONAIS_VER'], criar: (s) => new ProfissionaisView(s) },

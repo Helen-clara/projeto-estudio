@@ -46,7 +46,7 @@ export class GraficoLinha {
     if (dados.length === 0) return h('div', { class: 'vazio' }, 'Sem dados no período.');
     const L = 520;
     const A = 200;
-    const m = { esq: 10, dir: 10, topo: 22, base: 26 };
+    const m = { esq: 28, dir: 28, topo: 24, base: 26 };
     const max = Math.max(...dados.map((d) => d.valor), 1);
     const passo = dados.length > 1 ? (L - m.esq - m.dir) / (dados.length - 1) : 0;
     const pts = dados.map((d, i) => ({
@@ -64,11 +64,11 @@ export class GraficoLinha {
       g.append(svg('path', { class: 'area', d: `${caminho} L${pts[pts.length - 1].x},${A - m.base} L${pts[0].x},${A - m.base} Z` }));
     }
     g.append(svg('path', { class: 'linha', d: caminho }));
-    pts.forEach((p) => {
+    pts.forEach((p, i) => {
       g.append(
         svg('circle', { class: 'ponto', cx: p.x, cy: p.y, r: 4 }, svg('title', {}, `${p.d.rotulo}: ${formatar(p.d.valor)}`)),
         svg('text', { x: p.x, y: A - 8, 'text-anchor': 'middle' }, p.d.rotulo),
-        svg('text', { x: p.x, y: p.y - 9, 'text-anchor': 'middle' }, formatar(p.d.valor)),
+        svg('text', { x: p.x, y: p.y - 9, 'text-anchor': i === 0 ? 'start' : i === pts.length - 1 ? 'end' : 'middle' }, formatar(p.d.valor)),
       );
     });
     return g;
