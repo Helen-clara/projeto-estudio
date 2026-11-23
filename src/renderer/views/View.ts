@@ -17,6 +17,8 @@ export interface RotaView {
   rotulo: string;
   icone: string;
   grupo: 'Atendimento' | 'Cadastros' | 'Gestão';
+  /** Frase curta exibida no topo explicando para que serve a tela. */
+  descricao: string;
   /** Visível somente com pelo menos uma destas permissões (vazio = todos). */
   permissoes: string[];
   criar: (sessao: Sessao) => View;

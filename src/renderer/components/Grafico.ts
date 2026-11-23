@@ -10,8 +10,9 @@ const formatarPadrao = (v: number): string => v.toLocaleString('pt-BR', { style:
 function defs(): SVGDefsElement {
   return svg('defs', {},
     svg('linearGradient', { id: 'gradiente-ouro', x1: '0', x2: '1', y1: '0', y2: '0' },
-      svg('stop', { offset: '0%', 'stop-color': '#9b3050' }),
-      svg('stop', { offset: '100%', 'stop-color': '#d4a24c' })));
+      // Cores do tema ativo (escuro/claro), definidas em styles/tema.css.
+      svg('stop', { offset: '0%', style: 'stop-color: var(--grafico-1)' }),
+      svg('stop', { offset: '100%', style: 'stop-color: var(--grafico-2)' })));
 }
 
 /** Gráfico de barras horizontais em SVG (sem bibliotecas). */
@@ -31,7 +32,7 @@ export class GraficoBarras {
       const nome = d.rotulo.length > 22 ? `${d.rotulo.slice(0, 21)}…` : d.rotulo;
       g.append(
         svg('text', { x: 0, y: y + 21 }, nome),
-        svg('rect', { x: rotulo, y: y + 9, width: area, height: 14, rx: 7, fill: 'var(--fundo)' }),
+        svg('rect', { x: rotulo, y: y + 9, width: area, height: 14, rx: 7, fill: 'var(--grafico-trilho)' }),
         svg('rect', { class: 'barra', x: rotulo, y: y + 9, width: w, height: 14, rx: 7 }, svg('title', {}, `${d.rotulo}: ${formatar(d.valor)}`)),
         svg('text', { x: largura, y: y + 21, 'text-anchor': 'end' }, formatar(d.valor)),
       );
