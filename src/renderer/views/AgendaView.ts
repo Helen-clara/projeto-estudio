@@ -203,9 +203,13 @@ export class AgendaView extends View {
     for (const c of colunas) tabela.append(this.coluna(c, altura));
     this.grade.append(tabela);
 
-    // Rola até as 9h (início do expediente) ou até agora, se a agenda for de hoje.
+    // Rola até o primeiro atendimento do período; sem atendimentos, até as 9h
+    // (ou até a hora atual, quando a agenda é de hoje).
+    const minutos = (iso: string): number => Number(iso.slice(11, 13)) * 60 + Number(iso.slice(14, 16));
+    const primeiro = this.carregados.length ? Math.min(...this.carregados.map((a) => minutos(a.inicio))) : null;
     const agora = new Date();
-    const alvoMin = colunas.some((c) => c.hoje) ? Math.max(INICIO_GRADE, agora.getHours() * 60 - 60) : 9 * 60;
+    const alvoMin = primeiro !== null ? primeiro - 30
+      : colunas.some((c) => c.hoje) ? Math.max(INICIO_GRADE, agora.getHours() * 60 - 60) : 9 * 60;
     this.grade.scrollTop = Math.max(0, (alvoMin - INICIO_GRADE) * PX_POR_MIN - 20);
   }
 
@@ -401,7 +405,11 @@ export class AgendaView extends View {
         m.fechar();
         Toast.sucesso(atual ? 'Agendamento atualizado.' : 'Agendamento criado.');
         r.avisos.forEach((x) => Toast.aviso(x));
-        if (r.agendamento) this.data = Formato.paraData(r.agendamento.inicio);
+        // Mostra o dia (e, na visão semanal, o profissional) do agendamento salvo.
+        if (r.agendamento) {
+          this.data = Formato.paraData(r.agendamento.inicio);
+          this.profissionalSemana = r.agendamento.profissionalId;
+        }
         await this.recarregar();
       } }],
     });
