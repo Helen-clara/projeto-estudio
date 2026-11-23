@@ -1,0 +1,43 @@
+/* =====================================================================
+   Ink & Glow Studio — tema escuro (grafite + dourado + vinho)
+   Tokens usados por todas as telas e componentes.
+   ===================================================================== */
+:root {
+  --fundo: #111113;
+  --superficie: #18181c;
+  --cartao: #1f1f24;
+  --cartao-2: #27272d;
+  --borda: #303038;
+  --texto: #ececf1;
+  --suave: #b0b0bc;
+  --fraco: #85858f;
+  --ouro: #d4a24c;
+  --ouro-claro: #e6bd6f;
+  --ouro-fundo: rgba(212, 162, 76, 0.14);
+  --vinho: #9b3050;
+  --vinho-claro: #d0577a;
+  --vinho-fundo: rgba(155, 48, 80, 0.18);
+  --ok: #3fb97f;
+  --aviso: #e8a14a;
+  --erro: #ee5d76;
+  --info: #67a7e0;
+  --raio: 10px;
+  --raio-g: 14px;
+  --sombra: 0 16px 48px rgba(0, 0, 0, 0.45);
+  --fonte: "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body { font-family: var(--fonte); background: var(--fundo); color: var(--texto); font-size: 14px; line-height: 1.45; overflow: hidden; }
+button, input, select, textarea { font: inherit; color: inherit; }
+h1, h2, h3, h4 { color: #fff; letter-spacing: -0.2px; font-weight: 650; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--ouro); outline-offset: 2px; }
+::selection { background: var(--ouro-fundo); }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--ouro); width: 16px; height: 16px; }
+input[type="date"], input[type="time"] { color-scheme: dark; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* scrollbars discretas */
+* { scrollbar-width: thin; scrollbar-color: #3a3a44 transparent; }
