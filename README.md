@@ -16,11 +16,11 @@ O escopo oficial está em [docs/CONTEXTO.md](docs/CONTEXTO.md).
 | 3 | Cadastros (clientes, serviços, profissionais) + ViaCEP | `feat/cadastros` (#3) | ✅ |
 | 4 | Login, sessão e permissões (RBAC) | `feat/autenticacao` (#4) | ✅ |
 | 5 | Agenda, histórico e estatísticas + feriados (BrasilAPI) | `feat/agenda-historico` (#5) | ✅ |
-| 6 | Lembretes por e-mail + clima (Open-Meteo) | `feat/lembretes` | ✅ |
-| — | Estoque com cotação USD→BRL (AwesomeAPI) | — | ⏳ pendente |
-| — | Telas do sistema (layout principal e CRUDs) | — | ⏳ pendente |
+| 6 | Lembretes por e-mail + clima (Open-Meteo) | `feat/lembretes` (#6) | ✅ |
+| 7 | Estoque com cotação USD→BRL (AwesomeAPI) | `feat/estoque` (#8) | ✅ |
+| 8 | Interface do usuário (todas as telas) | `feat/interface` | ✅ |
 
-Hoje o app já tem **toda a camada de negócio** (entidades, repositories, services, IPC e preload) dos módulos acima e a **tela de login**. As demais telas ainda não existem: os módulos podem ser usados pelos scripts de teste ou pelo console do app (ver [Como testar](#-como-testar)).
+O app está completo: camada de negócio (entidades, repositories, services, IPC e preload) e **interface com todas as telas**, testadas de ponta a ponta pela própria interface (ver [Interface](#️-interface) e [Como testar](#-como-testar)).
 
 ---
 
@@ -34,6 +34,7 @@ Hoje o app já tem **toda a camada de negócio** (entidades, repositories, servi
 - **Agenda**: criar, remarcar, confirmar, cancelar, concluir e marcar falta, com máquina de estados, bloqueio de conflito de horário, horário de funcionamento configurável e aviso de **feriado nacional (BrasilAPI)**. O profissional só vê e altera a própria agenda.
 - **Histórico**: atendimentos concluídos por cliente, profissional ou período, com total cobrado.
 - **Estatísticas**: atendimentos e faturamento por mês, serviço e profissional, ticket médio, taxa de cancelamento/falta, clientes novos × recorrentes.
+- **Estoque**: materiais com custo em **USD e BRL** (cotação do dia pela **AwesomeAPI**, com cache de 15 min e último valor salvo como reserva), entradas, saídas e ajustes de inventário em transação, bloqueio de saída maior que o saldo, estorno, alerta de estoque baixo, relatório de valor e consumo por período.
 - **Lembretes**: e-mail um dia antes do agendamento (Nodemailer) com orientações de preparo e **dica de clima (Open-Meteo)**; agendador **node-cron** (ao abrir o app, diariamente às 09:00 e a cada hora); até 3 tentativas; reenvio manual; **modo simulação** quando não há SMTP configurado.
 
 ## 🛠️ Tecnologias
@@ -47,6 +48,30 @@ Hoje o app já tem **toda a camada de negócio** (entidades, repositories, servi
 - **node-cron** (agendador de lembretes)
 - **ts-node**, **concurrently**, **rimraf**, **ESLint** (ferramentas de desenvolvimento)
 
+**Interface sem frameworks:** HTML, CSS e TypeScript puro (módulos ES), com componentes próprios em classes — `Modal`, `DataTable`, `FormField`, `Toast`, `Sidebar`, `Abas` e gráficos em SVG. A escolha evita dependências pesadas no renderer e deixa visível a orientação a objetos pedida na disciplina.
+
+## 🖥️ Interface
+
+Tema escuro (grafite com destaques em dourado e vinho). O menu mostra só as telas que o perfil logado pode usar, e toda ação é conferida de novo no processo main.
+
+| Login | Painel (ADMIN) |
+| :---: | :---: |
+| ![Tela de login](docs/capturas/00-login.png) | ![Painel com indicadores e gráficos](docs/capturas/13-painel-final.png) |
+| **Cliente com endereço pelo CEP (ViaCEP)** | **Histórico do cliente** |
+| ![Cadastro de cliente com CEP](docs/capturas/02-cliente-cep.png) | ![Histórico de atendimentos do cliente](docs/capturas/09-historico-cliente.png) |
+| **Agenda — visão semanal** | **Concluir atendimento** |
+| ![Agenda semanal](docs/capturas/06-agenda-semana.png) | ![Conclusão com valor cobrado](docs/capturas/07-concluir.png) |
+| **Estoque — USD e BRL com a cotação** | **Relatório do estoque** |
+| ![Estoque](docs/capturas/10-estoque.png) | ![Relatório do estoque](docs/capturas/12-estoque-relatorio.png) |
+| **Lembretes** | **Perfil tatuador (menu reduzido)** |
+| ![Lembretes](docs/capturas/15-lembretes.png) | ![Painel do tatuador](docs/capturas/19-tatuador-painel.png) |
+
+**Telas:** Painel · Agenda (dia e semana) · Histórico · Clientes · Profissionais · Serviços · Estoque · Lembretes · Usuários.
+
+**Atalhos de teclado:** `Alt+1…9` navega pelo menu · `/` vai para a busca · `Ctrl+N` cria um item na tela atual · `Esc` fecha janelas.
+
+**Acessibilidade:** campos com rótulo e mensagem de erro ligados ao campo, foco visível, foco preso dentro das janelas modais (e devolvido ao fechar), avisos anunciados a leitores de tela e contraste alto no tema escuro.
+
 ## 🌐 APIs externas
 
 Todas têm classe tipada, timeout de 5s e fallback (o sistema não trava se a API cair).
@@ -56,7 +81,7 @@ Todas têm classe tipada, timeout de 5s e fallback (o sistema não trava se a AP
 | **ViaCEP** | Preenche o endereço do cliente a partir do CEP. | `ViaCepClient` | ✅ |
 | **BrasilAPI** | Aviso de feriado nacional na agenda (cache por ano). | `FeriadosClient` | ✅ |
 | **Open-Meteo** | Previsão do tempo para a dica de cuidado no lembrete. | `ClimaClient` | ✅ |
-| **AwesomeAPI** | Cotação USD→BRL do preço de custo dos materiais. | — | ⏳ |
+| **AwesomeAPI** | Cotação USD→BRL do preço de custo dos materiais. | `CotacaoClient` | ✅ |
 
 ## 🗄️ Banco de dados (8 tabelas)
 
@@ -128,6 +153,14 @@ npm run dev
 
 ## 🧪 Como testar
 
+### Pela interface
+
+Rode `npm start`, entre com um dos usuários de teste e siga o fluxo principal:
+**cliente com CEP → agendamento (avisos de conflito e feriado) → confirmar → concluir com valor → histórico do cliente → saída de material no estoque.**
+Depois entre como `tatuador` para ver o menu reduzido, a agenda só dele e o estoque limitado a "registrar consumo".
+
+> Esse fluxo foi executado de ponta a ponta pela própria interface (clicando e preenchendo as telas do app real) e todas as etapas passaram; as capturas acima são dessa execução.
+
 ### Scripts de teste (contra o banco do `.env`)
 
 Cada script mostra ✔/✖ por item e, no fim, inativa (exclusão lógica) o que criou. Use `--manter` para manter os registros.
@@ -137,8 +170,9 @@ Cada script mostra ✔/✖ por item e, no fim, inativa (exclusão lógica) o que
 | `npx ts-node scripts/testCadastros.ts` | CEP real (ViaCEP), cliente, serviço, vínculo com profissional, CPF duplicado/inválido, regras de inativação. |
 | `npx ts-node scripts/testAgenda.ts` | Criação, conflito de horário, horário de funcionamento, feriado (aviso + confirmação), máquina de estados, conclusão, histórico e estatísticas. |
 | `npx ts-node scripts/testLembretes.ts` | Lembrete em modo simulação com clima real, cliente sem e-mail, 3 tentativas com falha, sem duplicidade, reenvio manual. |
+| `npx ts-node scripts/testEstoque.ts` | Preço em USD convertido pela cotação real, entrada, saída, saldo insuficiente, ajuste, alerta de estoque baixo, regras do profissional, estorno e relatórios. |
 
-### Pelo app (console do DevTools)
+### Pela API do preload (console do DevTools)
 
 Com o app aberto e logado, abra **View → Toggle Developer Tools** e use a API exposta pelo preload (respostas no formato `{ ok, data, error }`, com as permissões do usuário logado):
 
@@ -172,15 +206,21 @@ src/
     main.ts              # janela, registro de IPC e agendador de lembretes
     core/
       database/          # Database (Singleton, pool mysql2) e BaseRepository
-      entities/          # Cliente, Servico, Profissional, Usuario, Agendamento, Lembrete, Endereco
+      entities/          # Cliente, Servico, Profissional, Usuario, Agendamento, Lembrete, Material, ...
       repositories/      # acesso ao MySQL com SQL parametrizado
-      services/          # regras de negócio (cadastros, auth, agenda, histórico, estatísticas, lembretes)
+      services/          # regras de negócio (cadastros, auth, agenda, histórico, estatísticas, lembretes, estoque)
       security/          # SessionManager, Permissao (RBAC), AuthorizationService, IpcGuard
       validators/        # CPF, e-mail, telefone, CEP, data de nascimento
-    integrations/        # ViaCepClient, FeriadosClient, ClimaClient
+    integrations/        # ViaCepClient, FeriadosClient, ClimaClient, CotacaoClient
     ipc/                 # handlers por módulo e containers de dependências
   preload/               # contextBridge + API tipada (window.api)
-  renderer/              # telas (login pronto; demais no Prompt 8)
+  renderer/
+    index.html, app.ts   # shell: menu por perfil, roteador (#/rota) e atalhos
+    login/               # tela de login
+    core/                # Api (ponte com window.api), Sessao, formatação, utilitários de DOM
+    components/          # Modal, DataTable, FormField, Toast, Sidebar, Abas, Grafico (SVG)
+    views/               # uma classe por tela (Dashboard, Agenda, Clientes, Estoque, ...)
+    styles/              # tema, componentes, layout e agenda
   shared/                # tipos e DTOs compartilhados (main ⇄ renderer)
 database/                # schema.sql e seed.sql
 scripts/                 # initDb, checkDb, gerarHashSenha e testes manuais
@@ -309,4 +349,36 @@ Commits agrupados por parte, em ordem cronológica (padrão `tipo(escopo): descr
 | `ba83867` | fix(lembretes): escreve hoje, amanha ou a data no e-mail conforme o envio |
 | `25e71fe` | chore(env): documenta variaveis de lembretes, modo simulacao e horario de funcionamento |
 | `e549b3a` | test(lembretes): adiciona script de teste em modo simulacao com falhas e reenvio |
+</details>
+
+<details>
+<summary><strong>Parte 7 — Estoque USD/BRL</strong> · analivia2303 · PR #8</summary>
+
+| Commit | Descrição |
+| :--- | :--- |
+| `96dbd3f` | feat(estoque): cria entidades Material e MovimentacaoEstoque com tipos compartilhados |
+| `f1eaf4c` | feat(estoque): adiciona CotacaoClient da AwesomeAPI e CotacaoService com cache e fallback |
+| `b1a4f17` | feat(estoque): adiciona repositories de materiais e movimentacoes com filtros, estoque baixo e consumo |
+| `93069ff` | feat(estoque): adiciona EstoqueService com preco USD/BRL, movimentacoes em transacao, alertas e relatorios |
+| `88c4ee9` | feat(estoque): adiciona handlers IPC de estoque com permissoes e preload tipado |
+| `475825e` | fix(estoque): consulta consumo em sequencia para nao abrir conexoes simultaneas |
+| `fbdc616` | test(estoque): adiciona script de teste com preco em USD, saldo insuficiente e alerta |
+</details>
+
+<details>
+<summary><strong>Parte 8 — Interface</strong> · analivia2303 · <code>feat/interface</code></summary>
+
+| Commit | Descrição |
+| :--- | :--- |
+| `c8d51e2` | feat(interface): adiciona componentes base Modal, DataTable, FormField, Toast, Abas e graficos SVG |
+| `576b71d` | feat(interface): cria shell principal com menu por perfil, roteador, atalhos e integracao com o login |
+| `4386661` | feat(clientes): cria tela de clientes com busca, CEP automatico pelo ViaCEP e historico em aba |
+| `83d33ab` | feat(profissionais): cria telas de profissionais e servicos com vinculo por especialidade e ativar/inativar |
+| `19b6b1b` | feat(agenda): cria tela de agenda com visao diaria e semanal, cores por status e avisos de conflito e feriado |
+| `9ddfaac` | feat(estoque): cria tela de estoque com alerta de estoque baixo, precos USD/BRL, movimentacoes e relatorio |
+| `b7d6ff9` | feat(lembretes): cria tela de lembretes com filtro por status, reenvio e processamento manual |
+| `31aa486` | feat(dashboard): cria painel inicial com agenda do dia, estoque baixo, faturamento e graficos SVG |
+| `97f06df` | feat(interface): adiciona telas de historico por periodo e de usuarios do sistema |
+| `c53f8ee` | fix(agenda): rola ate o primeiro atendimento e mostra o profissional do agendamento salvo |
+| — | docs(readme): revisão final com capturas de tela, atalhos e histórico das Partes 7 e 8 (este commit) |
 </details>
