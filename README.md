@@ -140,6 +140,17 @@ Modo desenvolvimento (recompila ao salvar):
 npm run dev
 ```
 
+### Rodando no GitHub Codespaces
+
+O Codespace é um servidor Linux sem tela, então o repositório traz um ambiente pronto em [`.devcontainer/`](.devcontainer/devcontainer.json) com um desktop virtual acessível pelo navegador.
+
+1. Crie o Codespace (ou, se ele já existia, rode **Codespaces: Rebuild Container** com `Ctrl+Shift+P`). A preparação instala as bibliotecas gráficas do Electron, roda `npm install` e cria o `.env`.
+2. Preencha o `.env` com as credenciais do MySQL (ele não vai para o Git).
+3. Na aba **Portas**, abra a porta **6080** no navegador e entre com a senha `vscode`.
+4. No terminal do Codespace, rode `npm start`: a janela do app aparece no desktop do navegador.
+
+> Se o erro for `libatk-1.0.so.0: cannot open shared object file` ou `Missing X server or $DISPLAY`, o Codespace ainda não foi reconstruído com esse ambiente. Se a conexão com o banco der `ETIMEDOUT`, o servidor MySQL pode estar bloqueando conexões vindas dos servidores do GitHub.
+
 ### Usuários de teste (seed — apenas desenvolvimento)
 
 | Usuário | Senha | Perfil |
