@@ -2,6 +2,7 @@ import { Api, ErroApi, EVENTO_SESSAO_EXPIRADA } from './core/Api.js';
 import { h, limpar, porId } from './core/dom.js';
 import { Formato, ROTULOS_ESPECIALIDADE, ROTULOS_PERFIL } from './core/formato.js';
 import { Sessao } from './core/Sessao.js';
+import { Tema } from './core/Tema.js';
 import { FormField, Formulario } from './components/FormField.js';
 import { Modal } from './components/Modal.js';
 import { Sidebar } from './components/Sidebar.js';
@@ -53,6 +54,8 @@ class App {
     porId('usuario-avatar').textContent = Formato.iniciais(u.nome);
     porId('usuario-nome').textContent = u.nome;
     porId('usuario-perfil').textContent = `${ROTULOS_PERFIL[u.perfil] ?? u.perfil}${u.especialidade ? ` · ${ROTULOS_ESPECIALIDADE[u.especialidade]}` : ''}`;
+    porId('slot-tema').replaceWith(Tema.criarBotao());
+    porId('data-hoje').textContent = this.dataDeHoje();
     porId('btn-senha').addEventListener('click', () => this.trocarSenha());
     porId('btn-sair').addEventListener('click', () => void this.sair());
     porId('app').hidden = false;
@@ -72,7 +75,7 @@ class App {
     Modal.fecharTodos();
     this.sidebar.marcarAtivo(rota.id);
     porId('titulo-tela').textContent = rota.rotulo;
-    porId('subtitulo-tela').textContent = this.subtitulo();
+    porId('subtitulo-tela').textContent = rota.descricao;
     document.title = `${rota.rotulo} — Ink & Glow Studio`;
 
     this.viewAtual = rota.criar(this.sessao);
@@ -87,7 +90,7 @@ class App {
     this.conteudo.focus({ preventScroll: true });
   }
 
-  private subtitulo(): string {
+  private dataDeHoje(): string {
     const hoje = new Date();
     const dia = Formato.diaSemana(hoje);
     return `${dia.charAt(0).toUpperCase()}${dia.slice(1)}, ${hoje.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}`;

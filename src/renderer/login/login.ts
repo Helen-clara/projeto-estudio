@@ -105,4 +105,36 @@ class TelaLogin {
   }
 }
 
-window.addEventListener('DOMContentLoaded', () => new TelaLogin().iniciar());
+/**
+ * Botão de tema da tela de login (só aparência): troca data-theme do <html>
+ * e guarda a escolha com a mesma chave usada pelo app (core/Tema.ts).
+ */
+class AlternadorTemaLogin {
+  private static readonly CHAVE = 'ink-glow:tema';
+
+  public static iniciar(): void {
+    const botao = document.getElementById('btn-tema');
+    if (!botao) return;
+    const atualizar = (): void => {
+      const escuro = document.documentElement.getAttribute('data-theme') !== 'light';
+      botao.textContent = escuro ? '☀ Tema claro' : '☾ Tema escuro';
+      botao.setAttribute('aria-label', escuro ? 'Mudar para o tema claro' : 'Mudar para o tema escuro');
+    };
+    botao.addEventListener('click', () => {
+      const novo = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', novo);
+      try {
+        window.localStorage.setItem(AlternadorTemaLogin.CHAVE, novo);
+      } catch {
+        // Sem armazenamento local: vale só até fechar o app.
+      }
+      atualizar();
+    });
+    atualizar();
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  AlternadorTemaLogin.iniciar();
+  new TelaLogin().iniciar();
+});

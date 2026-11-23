@@ -98,7 +98,7 @@ export class AgendaView extends View {
   }
 
   private legenda(): HTMLElement {
-    const cores: Array<[string, string]> = [['Agendado', 'var(--info)'], ['Confirmado', 'var(--ouro)'], ['Concluído', 'var(--ok)'], ['Faltou', 'var(--aviso)'], ['Cancelado', 'var(--erro)']];
+    const cores: Array<[string, string]> = [['Agendado', 'var(--st-agendado)'], ['Confirmado', 'var(--st-confirmado)'], ['Concluído', 'var(--st-concluido)'], ['Faltou', 'var(--st-faltou)'], ['Cancelado', 'var(--st-cancelado)']];
     return h('div', { class: 'ag-legenda', 'aria-label': 'Legenda de cores' },
       ...cores.map(([t, c]) => { const i = h('i'); i.style.background = c; return h('span', {}, i, t); }),
       h('span', {}, '· Clique num horário vago para agendar'));

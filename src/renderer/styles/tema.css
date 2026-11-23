@@ -1,43 +1,142 @@
 /* =====================================================================
-   Ink & Glow Studio — tema escuro (grafite + dourado + vinho)
-   Tokens usados por todas as telas e componentes.
+   Ink & Glow Studio — tokens de tema
+   Modo escuro (padrão) e modo claro, com bordô profundo como destaque.
+   O tema ativo fica em <html data-theme="dark|light"> (ver tema.ts).
    ===================================================================== */
-:root {
-  --fundo: #111113;
-  --superficie: #18181c;
-  --cartao: #1f1f24;
-  --cartao-2: #27272d;
-  --borda: #303038;
-  --texto: #ececf1;
-  --suave: #b0b0bc;
-  --fraco: #85858f;
-  --ouro: #d4a24c;
-  --ouro-claro: #e6bd6f;
-  --ouro-fundo: rgba(212, 162, 76, 0.14);
-  --vinho: #9b3050;
-  --vinho-claro: #d0577a;
-  --vinho-fundo: rgba(155, 48, 80, 0.18);
-  --ok: #3fb97f;
-  --aviso: #e8a14a;
-  --erro: #ee5d76;
-  --info: #67a7e0;
-  --raio: 10px;
-  --raio-g: 14px;
-  --sombra: 0 16px 48px rgba(0, 0, 0, 0.45);
-  --fonte: "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+
+/* ---------- Modo escuro (padrão) ---------- */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* superfícies */
+  --fundo: #121214;            /* preto carvão */
+  --superficie: #17171a;       /* menu lateral e topo */
+  --cartao: #1e1e22;           /* cinza-pedra */
+  --cartao-2: #26262b;         /* hover, áreas internas */
+  --campo: #151518;            /* fundo de inputs */
+  --borda: #2c2c32;
+  --borda-forte: #3b3b43;
+
+  /* texto */
+  --texto: #f3f3f5;
+  --suave: #b9b9c1;
+  --fraco: #8b8b94;
+  --prata: #9e9ea6;            /* prata velho: ícones, detalhes */
+
+  /* destaque bordô */
+  --primaria: #721828;
+  --primaria-hover: #8f1f33;
+  --primaria-contraste: #ffffff;
+  --primaria-texto: #e3899b;   /* vinho clareado para texto/ícone sobre fundo escuro */
+  --primaria-fundo: rgba(143, 31, 51, 0.22);
+  --primaria-borda: rgba(196, 74, 97, 0.45);
+  --foco: #c94a63;
+
+  /* estados */
+  --ok: #4cc38a;
+  --ok-fundo: rgba(76, 195, 138, 0.12);
+  --aviso: #e9a956;
+  --aviso-fundo: rgba(233, 169, 86, 0.12);
+  --erro: #f06b80;
+  --erro-fundo: rgba(240, 107, 128, 0.12);
+  --info: #7fb0e0;
+  --info-fundo: rgba(127, 176, 224, 0.12);
+
+  /* status de agendamento */
+  --st-agendado: var(--info);
+  --st-confirmado: var(--primaria-texto);
+  --st-concluido: var(--ok);
+  --st-faltou: var(--aviso);
+  --st-cancelado: var(--erro);
+
+  /* gráficos */
+  --grafico-1: #5a1220;
+  --grafico-2: #c2475f;
+  --grafico-trilho: #2a2a30;
+
+  /* acabamento */
+  --sombra: 0 24px 60px rgba(0, 0, 0, 0.55);
+  --sombra-suave: 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --brilho: radial-gradient(1200px 500px at 0% -10%, rgba(114, 24, 40, 0.22), transparent 60%);
+  --vidro: rgba(18, 18, 20, 0.72);
 }
 
+/* ---------- Modo claro ---------- */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --fundo: #f4f4f6;            /* cinza-pedra bem claro */
+  --superficie: #fafafb;
+  --cartao: #ffffff;
+  --cartao-2: #f0f0f3;
+  --campo: #ffffff;
+  --borda: #c8c8ce;            /* prata velho suave */
+  --borda-forte: #b2b2ba;
+
+  --texto: #141416;            /* preto carvão */
+  --suave: #3d3d45;
+  --fraco: #6e6e77;
+  --prata: #6e6e77;            /* prata velho escuro */
+
+  --primaria: #721828;
+  --primaria-hover: #5c1220;
+  --primaria-contraste: #ffffff;
+  --primaria-texto: #721828;
+  --primaria-fundo: rgba(114, 24, 40, 0.08);
+  --primaria-borda: rgba(114, 24, 40, 0.35);
+  --foco: #721828;
+
+  --ok: #1f7a4d;
+  --ok-fundo: rgba(31, 122, 77, 0.1);
+  --aviso: #94570a;
+  --aviso-fundo: rgba(148, 87, 10, 0.1);
+  --erro: #b3261e;
+  --erro-fundo: rgba(179, 38, 30, 0.08);
+  --info: #1f5f9e;
+  --info-fundo: rgba(31, 95, 158, 0.09);
+
+  --grafico-1: #c98a96;
+  --grafico-2: #721828;
+  --grafico-trilho: #ececf0;
+
+  --sombra: 0 24px 60px rgba(20, 20, 22, 0.18);
+  --sombra-suave: 0 1px 2px rgba(20, 20, 22, 0.06), 0 6px 18px rgba(20, 20, 22, 0.05);
+  --brilho: radial-gradient(1200px 500px at 0% -10%, rgba(114, 24, 40, 0.06), transparent 60%);
+  --vidro: rgba(244, 244, 246, 0.8);
+}
+
+/* ---------- Medidas e tipografia ---------- */
+:root {
+  --raio-p: 8px;
+  --raio: 12px;
+  --raio-g: 16px;
+  --fonte: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --fonte-titulo: "Segoe UI Variable Display", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --transicao: 160ms ease;
+}
+
+/* ---------- Base ---------- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { height: 100%; }
-body { font-family: var(--fonte); background: var(--fundo); color: var(--texto); font-size: 14px; line-height: 1.45; overflow: hidden; }
+body {
+  font-family: var(--fonte);
+  background: var(--fundo);
+  color: var(--texto);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--transicao), color var(--transicao);
+}
 button, input, select, textarea { font: inherit; color: inherit; }
-h1, h2, h3, h4 { color: #fff; letter-spacing: -0.2px; font-weight: 650; }
+h1, h2, h3, h4 { font-family: var(--fonte-titulo); color: var(--texto); letter-spacing: -0.2px; font-weight: 650; line-height: 1.25; }
+a { color: var(--primaria-texto); }
 [hidden] { display: none !important; }
-:focus-visible { outline: 2px solid var(--ouro); outline-offset: 2px; }
-::selection { background: var(--ouro-fundo); }
-input[type="checkbox"], input[type="radio"] { accent-color: var(--ouro); width: 16px; height: 16px; }
-input[type="date"], input[type="time"] { color-scheme: dark; }
+:focus-visible { outline: 2px solid var(--foco); outline-offset: 2px; }
+::selection { background: var(--primaria-fundo); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--primaria); width: 16px; height: 16px; }
 
-/* scrollbars discretas */
-* { scrollbar-width: thin; scrollbar-color: #3a3a44 transparent; }
+/* barras de rolagem discretas */
+* { scrollbar-width: thin; scrollbar-color: var(--borda-forte) transparent; }

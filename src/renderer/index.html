@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
   <title>Ink & Glow Studio</title>
+  <!-- Aplica o tema salvo (escuro/claro) antes de desenhar a página. -->
+  <script src="./tema.js"></script>
   <link rel="stylesheet" href="./styles/tema.css">
   <link rel="stylesheet" href="./styles/componentes.css">
   <link rel="stylesheet" href="./styles/layout.css">
@@ -21,6 +23,8 @@
           <p id="subtitulo-tela"></p>
         </div>
         <div class="usuario">
+          <span class="topo__data" id="data-hoje"></span>
+          <span id="slot-tema"></span>
           <div class="usuario__avatar" id="usuario-avatar" aria-hidden="true"></div>
           <div>
             <div class="usuario__nome" id="usuario-nome"></div>

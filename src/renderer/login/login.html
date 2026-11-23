@@ -5,10 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:">
   <title>Entrar — Ink & Glow Studio</title>
+  <!-- Aplica o tema salvo (escuro/claro) antes de desenhar a página. -->
+  <script src="../tema.js"></script>
+  <link rel="stylesheet" href="../styles/tema.css">
   <link rel="stylesheet" href="./login.css">
 </head>
 <body>
   <main class="login">
+    <button id="btn-tema" type="button" class="tema-botao login__tema">☀ Tema claro</button>
+
     <section class="login__card" aria-labelledby="login-titulo">
       <div class="login__marca">
         <div class="login__logo" aria-hidden="true">✦</div>
@@ -18,11 +23,13 @@
         </div>
       </div>
 
+      <p class="login__dica">Entre com o usuário e a senha que o administrador do estúdio criou para você.</p>
+
       <form id="form-login" class="login__form" novalidate>
         <label class="campo">
           <span class="campo__rotulo">Usuário</span>
           <input id="campo-login" name="login" type="text" autocomplete="username" maxlength="50"
-                 spellcheck="false" autocapitalize="off" required autofocus>
+                 spellcheck="false" autocapitalize="off" placeholder="ex.: recepcao" required autofocus>
         </label>
 
         <label class="campo">
@@ -39,7 +46,7 @@
         <button id="btn-entrar" type="submit" class="botao">Entrar</button>
       </form>
 
-      <p class="login__rodape">Acesso restrito à equipe do estúdio.</p>
+      <p class="login__rodape">Acesso restrito à equipe do estúdio · após 5 senhas erradas, o acesso fica bloqueado por 15 minutos.</p>
     </section>
   </main>
 
