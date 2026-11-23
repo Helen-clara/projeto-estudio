@@ -16,7 +16,7 @@ export function tag(texto: string, tipo: 'neutra' | 'ok' | 'erro' | 'aviso' | 'v
  * mostra o erro do backend num toast.
  */
 export function botao(texto: Filho, acao: () => Promise<void> | void, classe = 'btn btn--sec btn--mini', rotulo?: string): HTMLButtonElement {
-  const b = h('button', { type: 'button', class: classe, 'aria-label': rotulo }, texto);
+  const b = h('button', { type: 'button', class: classe, 'aria-label': rotulo, title: rotulo }, texto);
   b.addEventListener('click', () => {
     b.disabled = true;
     Promise.resolve()
